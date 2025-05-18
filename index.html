@@ -1,85 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yihsuan Lai | Portfolio</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      margin: 0;
-      padding: 0;
-      background: #f9f9f9;
-      color: #333;
-    }
-    header {
-      background: #222;
-      color: white;
-      padding: 2rem;
-      text-align: center;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 2rem;
-    }
-    .project {
-      background: white;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .project h3 {
-      margin-top: 0;
-    }
-    .project a {
-      color: #007acc;
-      text-decoration: none;
-    }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background: #eee;
-      font-size: 0.9rem;
-    }
-  </style>
+  <title>Yihsuan Lai - Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <header>
-    <h1>Yihsuan Lai</h1>
-    <p>Software Engineer | Backend & Full-Stack Developer</p>
+<body class="bg-gray-900 text-white font-sans">
+
+  <!-- 顶部导航 -->
+  <header class="flex items-center justify-between px-8 py-4 bg-gray-800 shadow-md">
+    <div class="text-2xl font-bold tracking-wide text-white">
+      WARUDO风主页
+    </div>
+    <nav class="space-x-4 text-sm">
+      <a href="#projects" class="hover:text-blue-400">项目</a>
+      <a href="#contact" class="hover:text-blue-400">联系</a>
+    </nav>
   </header>
 
-  <div class="container">
-    <h2>Projects</h2>
-
-    <div class="project">
-      <h3>📱 FurEver - Dog Adoption Advisor App</h3>
-      <p>A personalized dog breed recommendation app using AI, built on Android with OpenAI API and Firebase backend.</p>
-      <a href="#">View Project</a>
+  <!-- Hero 区域 -->
+  <section class="relative h-[60vh] bg-cover bg-center" style="background-image: url('assets/hero.png');">
+    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center">
+      <h1 class="text-4xl md:text-6xl font-bold text-white drop-shadow-lg">唤醒你的开发潜能</h1>
+      <p class="mt-4 text-lg text-blue-300">用代码表达自己，构建改变世界的作品。</p>
     </div>
+  </section>
 
-    <div class="project">
-      <h3>🌐 ClimateShield</h3>
-      <p>Hackathon-winning web app for real-time climate alerts and mutual aid during emergencies. Built with React, Node.js, MongoDB.</p>
-      <a href="#">View Project</a>
+  <!-- 项目展示 -->
+  <section id="projects" class="max-w-5xl mx-auto py-16 px-6">
+    <h2 class="text-3xl font-semibold mb-8 text-center text-blue-400">🚀 我的项目</h2>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+        <h3 class="text-xl font-bold mb-2">📌 LeetCode Reminder Chrome 插件</h3>
+        <p class="text-sm text-gray-300 mb-3">自动提醒每日刷题，并定期复习经典题，提升刷题效率。</p>
+        <a href="#" class="text-blue-400 hover:underline">GitHub 链接</a>
+      </div>
+
+      <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+        <h3 class="text-xl font-bold mb-2">🐶 FurEver 安卓 AI 养狗推荐</h3>
+        <p class="text-sm text-gray-300 mb-3">用 OpenAI 推荐适合你的狗狗类型，并展示照顾建议。</p>
+        <a href="#" class="text-blue-400 hover:underline">GitHub 链接</a>
+      </div>
+
+      <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+        <h3 class="text-xl font-bold mb-2">🌎 ClimateShield 气候应急平台</h3>
+        <p class="text-sm text-gray-300 mb-3">支持社区互助与实时预警的极端天气响应系统，荣获Hackathon冠军。</p>
+        <a href="#" class="text-blue-400 hover:underline">项目展示</a>
+      </div>
     </div>
+  </section>
 
-    <div class="project">
-      <h3>🧩 LeetCode Reminder Chrome Extension</h3>
-      <p>A browser extension that reminds users to practice daily and revisit classic algorithm problems.</p>
-      <a href="#">View Project</a>
+  <!-- 联系方式 -->
+  <section id="contact" class="bg-gray-800 py-12 text-center">
+    <h2 class="text-2xl font-semibold mb-4 text-blue-400">📫 联系我</h2>
+    <p class="mb-4 text-gray-300">欢迎通过以下方式联系我：</p>
+    <div class="flex justify-center space-x-4 text-sm">
+      <a href="https://github.com/yourusername" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded">GitHub</a>
+      <a href="mailto:you@example.com" class="bg-orange-500 hover:bg-orange-400 px-4 py-2 rounded">Email</a>
+      <a href="https://www.linkedin.com/in/your-link" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded">LinkedIn</a>
     </div>
+  </section>
 
-    <h2>Contact</h2>
-    <p>GitHub: <a href="https://github.com/yourusername">yourusername</a></p>
-    <p>Email: your.email@example.com</p>
-  </div>
-
-  <footer>
-    <p>&copy; 2025 Yihsuan Lai. All rights reserved.</p>
+  <!-- Footer -->
+  <footer class="text-center py-4 text-sm text-gray-500 bg-gray-900">
+    © 2025 Yihsuan Lai. 使用 Tailwind CSS 构建。
   </footer>
+
 </body>
 </html>
