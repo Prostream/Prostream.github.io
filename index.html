@@ -223,6 +223,16 @@
         const response = await fetch(article.file);
         const content = await response.text();
         articleContent.innerHTML = marked.parse(content);
+
+        // 强制重新激活 Tailwind Typography 样式（确保是 Markdown 标签）
+        articleContent.classList.remove('prose'); // 触发重新计算样式（可选）
+        void articleContent.offsetWidth; // 强制重排
+        articleContent.classList.add('prose', 'prose-invert', 'max-w-none');
+
+        // 高亮代码块
+        document.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightElement(block);
+        });
         
         // 代码高亮
         document.querySelectorAll('pre code').forEach((block) => {
