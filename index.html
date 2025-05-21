@@ -15,7 +15,8 @@
   <!-- 添加代码高亮库 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tailwindcss/typography@0.5.10/dist/typography.min.css">
+  <!-- 使用 GitHub Markdown CSS 美化 Markdown -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown.min.css">
   <style>
     .tab-content {
       display: none;
@@ -47,6 +48,17 @@
       color: #fff;
       border-radius: 8px;
     } */
+    /* 让 markdown-body 适配深色背景 */
+    .markdown-body {
+      background: transparent;
+      color: #e5e7eb;
+    }
+    .markdown-body pre {
+      background: #1e1e1e;
+    }
+    .markdown-body table {
+      color: #e5e7eb;
+    }
   </style>
 </head>
 <body class="bg-gray-900 text-white font-sans">
@@ -111,7 +123,7 @@
 
       <!-- 右侧文章内容 -->
       <div class="flex-1 bg-gray-800 rounded-lg p-6 h-[600px] overflow-y-auto">
-        <div id="article-content" class="prose prose-invert max-w-none">
+        <div id="article-content" class="markdown-body" style="background:transparent;">
           <!-- 文章内容将通过 JavaScript 动态加载 -->
         </div>
       </div>
@@ -216,13 +228,7 @@
         const content = await response.text();
 
         // 渲染 Markdown 为 HTML
-        const html = marked.parse(content);
-
-        // 设置内容并添加美化 class
-        articleContent.innerHTML = html;
-        articleContent.className = 'prose prose-invert max-w-none';
-
-        // 代码高亮
+        articleContent.innerHTML = marked.parse(content);
         articleContent.querySelectorAll('pre code').forEach((block) => {
           hljs.highlightElement(block);
         });
