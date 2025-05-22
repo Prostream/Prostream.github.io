@@ -1,0 +1,44 @@
+# 3362 Zero Array Transformation 3
+
+## 题意：
+
+**Input:** nums = [2,0,2], queries = [[0,2],[0,2],[1,1]]
+
+**Output:** 1
+
+每个 `query = [l, r]` 表示：你可以在某个时刻 **任选是否对 `[l, r]` 的每个位置减去最多 1**。
+
+目标是：通过这些操作，使得每个 `nums[i]` 减到 0。
+
+你可以删掉一些 query，问你最多可以删掉多少个还保持 nums 可以变成全 0。若无法变成 0，返回 `-1`
+
+## 官方答案：
+
+```python
+class Solution:
+    def maxRemoval(self, nums: List[int], queries: List[List[int]]) -> int:
+        queries.sort(key=lambda x: x[0])
+        heap = []
+        deltaArray = [0] * (len(nums) + 1)
+        operations = 0
+        j = 0
+        for i, num in enumerate(nums):
+            operations += deltaArray[i]
+            while j < len(queries) and queries[j][0] == i:
+                heappush(heap, -queries[j][1])
+                j += 1
+            while operations < num and heap and -heap[0] >= i:
+                operations += 1
+                deltaArray[-heappop(heap) + 1] -= 1
+            if operations < num:
+                return -1
+        return len(heap)
+```
+
+## 思考：
+
+和3355 3356题成体系，这道题的进阶思想是lazy segment tree，单纯理解这道题的话
+
+我们遍历每个 nums[i]，累积前面所有 query 的减操作数。
+如果当前 nums[i] 的值大于我们目前已有的操作数，那就从还没用的 query 中选一个能覆盖 i 的，并优先选择右端点大的 query（即能覆盖更远的），用来补操作。
+最终没有用到的 query 就是“冗余的”，我们统计能删掉多少个。

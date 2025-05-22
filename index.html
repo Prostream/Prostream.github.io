@@ -163,16 +163,36 @@
     font-weight: bold;
     color: #3b82f6;
   }
+  .markdown-body table {
+    background-color: #1f2937; /* 深灰背景 */
+    border-collapse: collapse;
+  }
+  .markdown-body th, .markdown-body td {
+    border: 1px solid #374151;
+    padding: 8px;
+    color: #e5e7eb; /* 明亮文字 */
+  }
+
+  .markdown-body pre {
+    background-color: #111827 !important; /* 更深的代码块背景 */
+    color: #f8f8f2 !important;           /* 提高对比 */
+    padding: 1em;
+    border-radius: 6px;
+    overflow-x: auto;
+  }
 </style>
 
 <script>
   // 这里直接写死文件名列表，实际可用后端API或构建工具自动生成
   const articles = [
+    { id: 'BQ-questions-summary', title: 'BQ 面试题总结', url: 'articles/BQ-questions-summary.md' },
     { id: 'Summary-of-core-backend-work', title: '核心后端工作总结', url: 'articles/Summary-of-core-backend-work.md' },
     { id: 'typescript-best-practices', title: 'TypeScript 最佳实践', url: 'articles/typescript-best-practices.md' },
     { id: 'leetcode-Notes', title: 'LeetCode 笔记', url: 'articles/leetcode-Notes.md' },
     { id: 'react-intro', title: 'React 入门', url: 'articles/react-intro.md' },
-    { id: 'docker-guide', title: 'Docker 指南', url: 'articles/docker-guide.md' }
+    { id: 'docker-guide', title: 'Docker 指南', url: 'articles/docker-guide.md' },
+    { id: 'segment-trees', title: '线段树（Segment Trees）', url: 'articles/segment-trees.md' },
+    { id: '3362-Zero-Array-Transformation-3', title: '3362 Zero Array Transformation 3', url: 'articles/3362-Zero-Array-Transformation-3' }
   ];
 
   // 渲染左侧文章列表
