@@ -109,20 +109,19 @@
   </section>
 
   <!-- 博客区域 -->
-  <section id="blog" class="tab-content max-w-7xl mx-auto py-16 px-6">
-    <h2 class="text-3xl font-semibold mb-8 text-center text-blue-400">📝 技术博客</h2>
+  <section id="blog" class="tab-content max-w-full mx-auto py-16 px-6">
+    <h2 class="text-3xl font-semibold mb-8 text-center text-blue-400">技术博客</h2>
     
     <div class="flex gap-8">
-      <!-- 左侧目录 -->
-      <div class="w-64 bg-gray-800 rounded-lg p-4 h-[600px] overflow-y-auto">
-        <h3 class="text-lg font-semibold mb-4">文章目录</h3>
-        <ul class="space-y-2" id="article-list">
-          <!-- 文章列表将通过 JavaScript 动态加载 -->
-        </ul>
+      <!-- 左侧目录（TOC） -->
+      <div class="w-64 bg-gray-800 rounded-lg p-4 min-h-[700px] overflow-y-auto">
+        <h3 class="text-lg font-semibold mb-4">文章</h3>
+        <ul id="article-list" class="space-y-2 mb-6"></ul>
+        <h3 class="text-lg font-semibold mb-4">目录</h3>
+        <div id="toc"></div>
       </div>
-
       <!-- 右侧文章内容 -->
-      <div class="flex-1 bg-gray-800 rounded-lg p-6 h-[600px] overflow-y-auto">
+      <div class="flex-1 bg-gray-800 rounded-lg p-6 min-h-[700px] overflow-y-auto">
         <div id="article-content" class="markdown-body" style="background:transparent;">
           <!-- 文章内容将通过 JavaScript 动态加载 -->
         </div>
@@ -147,121 +146,112 @@
   </footer>
 
   <!-- 添加文章内容和 JavaScript -->
-  <script>
-    // 配置
-    const config = {
-      username: 'Prostream',
-      repo: 'Prostream.github.io',
-      branch: 'main'
-    };
+  <!-- 重写后的文章加载逻辑（模仿 LLM Cookbook 结构） -->
+<!-- 重写后的文章加载逻辑（模仿 LLM Cookbook 结构，含右侧目录） -->
+<style>
+  #toc a {
+    display: block;
+    padding: 4px 0;
+    font-size: 14px;
+    color: #93c5fd;
+    text-decoration: none;
+  }
+  #toc a:hover {
+    color: #60a5fa;
+  }
+  #toc a.active {
+    font-weight: bold;
+    color: #3b82f6;
+  }
+</style>
 
-    let articles = [];
+<script>
+  // 这里直接写死文件名列表，实际可用后端API或构建工具自动生成
+  const articles = [
+    { id: 'Summary-of-core-backend-work', title: '核心后端工作总结', url: 'articles/Summary-of-core-backend-work.md' },
+    { id: 'typescript-best-practices', title: 'TypeScript 最佳实践', url: 'articles/typescript-best-practices.md' },
+    { id: 'leetcode-Notes', title: 'LeetCode 笔记', url: 'articles/leetcode-Notes.md' },
+    { id: 'react-intro', title: 'React 入门', url: 'articles/react-intro.md' },
+    { id: 'docker-guide', title: 'Docker 指南', url: 'articles/docker-guide.md' }
+  ];
 
-    // 获取文章列表
-    async function fetchArticles() {
-      try {
-        // 使用 GitHub API 获取 articles 文件夹内容
-        const response = await fetch(
-          `https://api.github.com/repos/${config.username}/${config.repo}/contents/articles?ref=${config.branch}`
-        );
-        const files = await response.json();
-        
-        // 过滤出 .md 文件并按文件名排序
-        articles = files
-          .filter(file => file.name.endsWith('.md'))
-          .map(file => ({
-            id: file.name.replace('.md', ''),
-            title: file.name
-              .replace('.md', '')
-              .replace(/-/g, ' ')
-              .replace(/\b\w/g, l => l.toUpperCase()), // 首字母大写
-            file: file.download_url
-          }))
-          .sort((a, b) => a.title.localeCompare(b.title)); // 按标题排序
-
-        return articles;
-      } catch (error) {
-        console.error('获取文章列表失败:', error);
-        throw error;
-      }
-    }
-
-    // 初始化文章列表
-    async function initArticleList() {
-      const articleList = document.getElementById('article-list');
-      articleList.innerHTML = '<li class="text-center"><span class="loading"></span> 加载中...</li>';
-
-      try {
-        await fetchArticles();
-        
-        articleList.innerHTML = ''; // 清空加载提示
-        articles.forEach(article => {
-          const li = document.createElement('li');
-          li.innerHTML = `
-            <a href="#" class="text-blue-400 hover:text-blue-300" onclick="loadArticle('${article.id}')">
-              ${article.title}
-            </a>
-          `;
-          articleList.appendChild(li);
-        });
-
-        // 如果有文章，加载第一篇
-        if (articles.length > 0) {
-          loadArticle(articles[0].id);
-        }
-      } catch (error) {
-        articleList.innerHTML = '<li class="text-red-500">加载文章列表失败，请稍后重试。</li>';
-      }
-    }
-
-    // 加载文章
-    async function loadArticle(articleId) {
-      const article = articles.find(a => a.id === articleId);
-      if (!article) return;
-
-      const articleContent = document.getElementById('article-content');
-      articleContent.innerHTML = '<div class="text-center"><span class="loading"></span> 加载中...</div>';
-
-      try {
-        // 获取 Markdown 内容
-        const response = await fetch(article.file);
-        const content = await response.text();
-
-        // 渲染 Markdown 为 HTML
-        articleContent.innerHTML = marked.parse(content);
-        articleContent.querySelectorAll('pre code').forEach((block) => {
-          hljs.highlightElement(block);
-        });
-      } catch (error) {
-        console.error('加载文章失败:', error);
-        articleContent.innerHTML = '<p class="text-red-500">加载文章失败，请稍后重试。</p>';
-      }
-    }
-
-    // 切换标签页
-    function switchTab(tabId) {
-      // 隐藏所有内容
-      document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      
-      // 取消所有按钮的激活状态
-      document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.remove('active');
-      });
-      
-      // 显示选中的内容
-      document.getElementById(tabId).classList.add('active');
-      
-      // 激活对应的按钮
-      event.target.classList.add('active');
-    }
-
-    // 初始化
-    document.addEventListener('DOMContentLoaded', () => {
-      initArticleList();
+  // 渲染左侧文章列表
+  function renderArticleList() {
+    const list = document.getElementById('article-list');
+    list.innerHTML = '';
+    articles.forEach(article => {
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="#${article.id}" class="block px-2 py-1 rounded hover:bg-gray-700 ${location.hash.slice(1) === article.id ? 'bg-gray-700 text-blue-400' : 'text-blue-300'}">${article.title}</a>`;
+      list.appendChild(li);
     });
-  </script>
+  }
+
+  // 渲染文章内容和目录
+  async function renderArticleFromHash() {
+    const hash = location.hash.slice(1);
+    const article = articles.find(a => a.id === hash) || articles[0];
+    const articleContent = document.getElementById('article-content');
+    const toc = document.getElementById('toc');
+    articleContent.innerHTML = '<div class="text-center"><span class="loading"></span> 加载中...</div>';
+    toc.innerHTML = '';
+
+    try {
+      const res = await fetch(article.url);
+      const content = await res.text();
+      const html = marked.parse(content);
+      articleContent.innerHTML = html;
+      articleContent.className = 'markdown-body prose prose-invert max-w-full text-base';
+
+      // 代码高亮
+      articleContent.querySelectorAll('pre code').forEach((block) => hljs.highlightElement(block));
+
+      // 生成目录
+      const headings = articleContent.querySelectorAll('h2, h3');
+      headings.forEach(h => {
+        const id = h.textContent.toLowerCase().replace(/\s+/g, '-');
+        h.id = id;
+        const link = document.createElement('a');
+        link.href = `#${id}`;
+        link.textContent = h.textContent;
+        link.className = h.tagName === 'H2' ? 'block pl-2 font-semibold' : 'block pl-6';
+        link.onclick = (e) => {
+          e.preventDefault();
+          document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        };
+        toc.appendChild(link);
+      });
+    } catch (e) {
+      articleContent.innerHTML = '<p class="text-red-500">文章加载失败。</p>';
+    }
+  }
+
+  window.addEventListener('hashchange', () => {
+    renderArticleList();
+    renderArticleFromHash();
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderArticleList();
+    renderArticleFromHash();
+  });
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(el => {
+      el.classList.remove('active');
+    });
+    document.getElementById(tab).classList.add('active');
+    document.querySelectorAll('.tab-button').forEach(el => {
+      el.classList.remove('active');
+    });
+    if (tab === 'projects') {
+      document.querySelector('.tab-button[onclick*="projects"]').classList.add('active');
+    } else if (tab === 'blog') {
+      document.querySelector('.tab-button[onclick*="blog"]').classList.add('active');
+    }
+    document.getElementById(tab).scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+
 
 </body>
 </html>
